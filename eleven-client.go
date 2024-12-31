@@ -13,10 +13,6 @@ import (
 
 const modelID = "eleven_multilingual_v2"
 
-func getVoices() []string {
-	return []string{"Xb7hH8MSUJpSbSDYk0k2", "iP95p4xoKVk53GoZ742B", "pqHfZKP75CvOlQylNhV4"}
-}
-
 func initEleven() *elevenlabs.Client {
 	godotenv.Load(".env")
 
@@ -30,27 +26,39 @@ func initEleven() *elevenlabs.Client {
 
 }
 
-func callEleven(client *elevenlabs.Client, voice int, text string) {
+func callEleven(client *elevenlabs.Client, voice, text string) {
 	log.Printf("Making Request Struct\n")
 	ttsReq := elevenlabs.TextToSpeechRequest{
 		Text:    text,
 		ModelID: modelID}
 
 	log.Printf("Calling client\n")
-	audio, err := client.TextToSpeech(getVoices()[voice], ttsReq)
+	audio, err := client.TextToSpeech(voice, ttsReq)
 	if err != nil {
 		log.Printf("ERROR CALLING CLIENT\n")
 		log.Fatal(err)
 	}
 
 	log.Printf("Writing File\n")
-	if err = os.WriteFile("/tmp/elabs.mp3", audio, 0644); err != nil {
+	file, err := os.Create("elabs.mp3")
+	if err != nil {
+		log.Printf("ERROR CREATING FILE\n")
+		log.Fatal(err)
+	}
+	defer file.Close()
+	_, err = file.Write(audio)
+	if err != nil {
+		log.Printf("ERROR WRITING TO FILE\n")
+		log.Fatal(err)
+	}
+	err = file.Sync()
+	if err != nil {
 		log.Printf("ERROR WRITING TO FILE\n")
 		log.Fatal(err)
 	}
 
 	log.Printf("Executing File\n")
-	cmd := exec.Command("mpg123", "/tmp/elabs.mp3")
+	cmd := exec.Command("mpg123", "elabs.mp3")
 	if err = cmd.Start(); err != nil {
 		log.Printf("ERROR EXECUTING FILE\n")
 		log.Fatal(err)

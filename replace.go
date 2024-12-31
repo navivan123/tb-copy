@@ -8,8 +8,12 @@ import (
 
 const peopleSize = 3
 
+func getVoices() []string {
+	return []string{"Xb7hH8MSUJpSbSDYk0k2", "iP95p4xoKVk53GoZ742B", "pqHfZKP75CvOlQylNhV4"}
+}
+
 func getPeople() []string {
-	return []string{"judy:", "nick:", "hammond:"}
+	return []string{"alice:", "chris:", "bill:"}
 }
 
 func replace(text string) []string {
@@ -44,9 +48,9 @@ func r_split(text string, idx int) []string {
 
 func main() {
 	client := initEleven()
-	arr := replace("judy: test judy: dasdf nick: asdfasdf judy: asdfawef hammond: asewfawef nick: asfwf judy: dd")
+	arr := replace("alice: I love testing! alice: Even more testing AWOOGA!;) chris: Hoooly shit! alice: I'm so cool bill: avengers assemble chris: i'm chris alice: FINAL TEST")
 	for _, voice := range arr {
 		idx, _ := strconv.Atoi(voice[0:1])
-		callEleven(client, idx, voice[1:])
+		callEleven(client, getVoices()[idx], voice[1:])
 	}
 }
