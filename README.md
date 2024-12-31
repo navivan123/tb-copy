@@ -7,7 +7,7 @@ an attempt at a go version of the bot used by twitch streamer kenta https://gith
 Download MPG123: https://www.mpg123.de/download/win64/1.32.10/ \
 Add MPG123's folder location to the PATH environment variable
 #### Linux
-Use pacman -S mpg123 to install mpg123 on arch. \  
+Use pacman -S mpg123 to install mpg123 on arch \
 Use apt for Ubuntu... etc etc etc
 
 It should automatically add it to the PATH and the app will use it.
