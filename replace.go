@@ -46,9 +46,9 @@ func r_split(text string, idx int) []string {
 	return arr2
 }
 
-func main() {
+func initiateElevenLabs(inputText string) {
 	client := initEleven()
-	arr := replace("alice: I love testing! alice: Even more testing AWOOGA!;) chris: Hoooly shit! alice: I'm so cool bill: avengers assemble chris: i'm chris alice: FINAL TEST")
+	arr := replace(inputText)
 	for _, voice := range arr {
 		idx, _ := strconv.Atoi(voice[0:1])
 		callEleven(client, getVoices()[idx], voice[1:])

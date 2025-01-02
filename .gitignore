@@ -1,4 +1,6 @@
 .env
+*.json
 bot
 bot.exe
 elabs.mp3
+*.testing
