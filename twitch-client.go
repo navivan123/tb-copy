@@ -144,7 +144,6 @@ func listen(w http.ResponseWriter, r *http.Request) {
 }
 
 func storeTokenHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("AAAAAAAAAAAAAAAAAAA")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body", http.StatusInternalServerError)
