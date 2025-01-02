@@ -19,7 +19,7 @@ It should automatically add it to the PATH and the app will use it.
 Create a file .env on app directory called .env \
 List out your Eleven Labs api key on the file like so: \
 ELABS_API="<API_KEY_HERE>" \
-Also, make sure to set the channel ID you want to use the bot on:
+Also, make sure to set the channel ID you want to use the bot on: \
 CHANNEL_ID="<CHANNEL_ID_HERE>"
 
 #### Windows:
