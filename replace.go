@@ -46,6 +46,7 @@ func r_split(text string, idx int) []string {
 	return arr2
 }
 
+// Need to move this to main
 func initiateElevenLabs(inputText string) {
 	client := initEleven()
 	arr := replace(inputText)

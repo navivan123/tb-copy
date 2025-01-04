@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/pkg/browser"
 	"io"
 	"log"
@@ -21,23 +22,25 @@ type TokenStore struct {
 	Expires string `json:"expiry"`
 }
 
-const clientID = "2eeuai1d8j81wci0beavpwsaan8hcq"
+const clientIDFake = "hahauthoughtiwouldputmyclientidhere"
 
 var tokenChan = make(chan string)
 
-func getAuthToken() string {
+func (cfg *apiConfig) getAuthToken() {
 
+	// Determine if stored token is expired.  If so, re-fetch it using the twitch API, and store it to token.json
 	expDate, token := retrieveToken()
 	if (expDate == time.Time{} || token == "") || time.Now().After(expDate) {
 		serv := startServer()
 		defer serv.Close()
-		token = callOauth(clientID)
+		token = callOauth(cfg.ClientID)
 		storeToken(token)
+		cfg.TwitchToken = token
 
-		return token
+		return
 	}
 
-	return token
+	return
 }
 
 func callOauth(clientID string) string {
@@ -53,13 +56,14 @@ func callOauth(clientID string) string {
 	if token == "" {
 		log.Fatal("Error Obtaining Token!")
 	}
-	fmt.Printf("Access Token Received: %s\n", token)
 
 	return token
 }
 
+const expiresIn = (24*60*time.Hour - 1*time.Hour)
+
 func storeToken(token string) {
-	expDate := time.Now().Add(24 * 60 * time.Hour).Format(time.RFC3339)
+	expDate := time.Now().Add(expiresIn).Format(time.RFC3339)
 	tokenToStore := &TokenStore{Token: token, Expires: expDate}
 
 	jsonData, err := json.Marshal(tokenToStore)
@@ -105,8 +109,6 @@ func startServer() *http.Server {
 	go httpServ.ListenAndServe()
 	return &httpServ
 }
-
-func endServer() {}
 
 func listen(w http.ResponseWriter, r *http.Request) {
 
@@ -168,7 +170,6 @@ func storeTokenHandler(w http.ResponseWriter, r *http.Request) {
 	// Store the token in a global variable
 	tokenChan <- data.Token
 
-	fmt.Println("Access token received:", data.Token)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Token stored successfully"))
 }
