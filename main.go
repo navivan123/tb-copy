@@ -48,8 +48,12 @@ func main() {
 	config.getAuthToken()
 	config.initTwitchPubSub()
 
-	// Start all "daemons"
+	// Defines all the sub-services
 	config.twitchPubSubListenToPointsEvents()
+	config.twitchPubSubListenToModEvents()
+
+	// Start all "daemons"
+	go config.TwitchPubSubClient.Start()
 
 	// Wait for user input to exit
 	fmt.Println("Press any key or Ctrl+C to stop!")

@@ -42,9 +42,13 @@ func (cfg *apiConfig) getAuthToken() {
 	return
 }
 
+const twitchOAuthURLHead = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id="
+const twitchOAuthScopes = "&scope=whispers%3Aread+channel%3Aread%3Aredemptions+channel%3Amoderate"
+const twitchOAuthURLTail = "&redirect_uri=http://localhost:3000" + twitchOAuthScopes
+
 func callOauth(clientID string) string {
 
-	tokenURL := fmt.Sprintf("https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=%s&redirect_uri=http://localhost:3000&scope=channel%%3Aread%%3Aredemptions", clientID)
+	tokenURL := fmt.Sprintf("%s%s%s", twitchOAuthURLHead, clientID, twitchOAuthURLTail)
 
 	err := browser.OpenURL(tokenURL)
 	if err != nil {

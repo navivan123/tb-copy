@@ -38,6 +38,7 @@ func callEleven(client *elevenlabs.Client, voice, text string) {
 }
 
 func writeAudioAndPlay(audio []byte) {
+
 	log.Printf("Writing File\n")
 	file, err := os.Create("elabs.mp3")
 	if err != nil {
@@ -56,14 +57,21 @@ func writeAudioAndPlay(audio []byte) {
 		log.Fatal(err)
 	}
 
+	playAudio("elabs.mp3")
+
+}
+
+func playAudio(filename string) {
+
 	log.Printf("Executing File\n")
-	cmd := exec.Command("mpg123", "elabs.mp3")
-	if err = cmd.Start(); err != nil {
-		log.Printf("ERROR EXECUTING FILE\n")
-		log.Fatal(err)
+	cmd := exec.Command("mpg123", filename)
+	if err := cmd.Start(); err != nil {
+		log.Printf("ERROR EXECUTING COMMAND\n")
+		//log.Fatal(err)
 	}
-	if err = cmd.Wait(); err != nil {
-		log.Printf("ERROR WAITING FOR COMMAND FILE")
-		log.Fatal(err)
+	if err := cmd.Wait(); err != nil {
+		log.Printf("ERROR WAITING FOR COMMAND END")
+		//log.Fatal(err)
 	}
+
 }
