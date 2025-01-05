@@ -45,13 +45,3 @@ func r_split(text string, idx int) []string {
 	}
 	return arr2
 }
-
-// Need to move this to main
-func initiateElevenLabs(inputText string) {
-	client := initEleven()
-	arr := replace(inputText)
-	for _, voice := range arr {
-		idx, _ := strconv.Atoi(voice[0:1])
-		callEleven(client, getVoices()[idx], voice[1:])
-	}
-}

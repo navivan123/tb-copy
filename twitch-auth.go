@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/joho/godotenv"
 	"github.com/pkg/browser"
 	"io"
 	"log"
@@ -39,7 +38,7 @@ func (cfg *apiConfig) getAuthToken() {
 
 		return
 	}
-
+	cfg.TwitchToken = token
 	return
 }
 
@@ -167,7 +166,7 @@ func storeTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Store the token in a global variable
+	// Store the token in channel so that init process can unblock and retrieve the token for use.
 	tokenChan <- data.Token
 
 	w.WriteHeader(http.StatusOK)

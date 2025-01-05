@@ -4,7 +4,6 @@ import (
 	"context"
 	//"fmt"
 	"github.com/haguro/elevenlabs-go"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"os/exec"
@@ -13,19 +12,14 @@ import (
 
 const modelID = "eleven_multilingual_v2"
 
-func initEleven() *elevenlabs.Client {
-	godotenv.Load(".env")
-
-	elevenAPI := os.Getenv("ELABS_API")
-	if elevenAPI == "" {
-		log.Fatal("ELABS_API must be set")
-	}
-	log.Printf("Client Initialized\n")
-	client := elevenlabs.NewClient(context.Background(), elevenAPI, 15*time.Second)
-	return client
-
+// Initiates elevenlabs client and returns it to use later
+func (cfg *apiConfig) initEleven() {
+	client := elevenlabs.NewClient(context.Background(), cfg.ElabsKey, 15*time.Second)
+	cfg.ElabsClient = client
+	return
 }
 
+// Calls elevenlabs API to generate mp3 with text and voice, and then play it
 func callEleven(client *elevenlabs.Client, voice, text string) {
 	log.Printf("Making Request Struct\n")
 	ttsReq := elevenlabs.TextToSpeechRequest{
@@ -39,6 +33,11 @@ func callEleven(client *elevenlabs.Client, voice, text string) {
 		log.Fatal(err)
 	}
 
+	writeAudioAndPlay(audio)
+
+}
+
+func writeAudioAndPlay(audio []byte) {
 	log.Printf("Writing File\n")
 	file, err := os.Create("elabs.mp3")
 	if err != nil {
@@ -67,5 +66,4 @@ func callEleven(client *elevenlabs.Client, voice, text string) {
 		log.Printf("ERROR WAITING FOR COMMAND FILE")
 		log.Fatal(err)
 	}
-
 }
