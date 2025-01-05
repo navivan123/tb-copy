@@ -37,10 +37,12 @@ func callEleven(client *elevenlabs.Client, voice, text string) {
 
 }
 
+const soundRoot = "sounds/"
+
 func writeAudioAndPlay(audio []byte) {
 
 	log.Printf("Writing File\n")
-	file, err := os.Create("elabs.mp3")
+	file, err := os.Create(soundRoot + "elabs.mp3")
 	if err != nil {
 		log.Printf("ERROR CREATING FILE\n")
 		log.Fatal(err)
@@ -63,8 +65,8 @@ func writeAudioAndPlay(audio []byte) {
 
 func playAudio(filename string) {
 
-	log.Printf("Executing File\n")
-	cmd := exec.Command("mpg123", filename)
+	log.Printf("Playing Audio\n")
+	cmd := exec.Command("mpg123", soundRoot+filename)
 	if err := cmd.Start(); err != nil {
 		log.Printf("ERROR EXECUTING COMMAND\n")
 		//log.Fatal(err)
