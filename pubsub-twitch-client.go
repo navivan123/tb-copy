@@ -46,6 +46,7 @@ func (cfg *apiConfig) pointsEventCallback(channelID string, data *twitchpubsub.P
 	}
 }
 
+// Determines which sound effect to play based on the type of Mod Action used.
 func (cfg *apiConfig) modEventCallback(channelID string, data *twitchpubsub.ModerationAction) {
 	if data.ModerationAction == "timeout" {
 		a := map[int]string{0: "ooh.mp3", 1: "oohh.mp3"}
